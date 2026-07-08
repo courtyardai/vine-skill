@@ -8,12 +8,16 @@ description: >-
   from Y", "reserve a class at Z"), when you need the deep link / action surface
   rather than a guessed URL, when asked what platform or software a business runs
   on, or when researching transaction stacks across many businesses (GTM, market
-  maps, agentic commerce). Powered by the Vine /detect API.
+  maps, agentic commerce). Powered by the Vine /detect API. Skip this when you
+  already have a working, direct integration with the business's booking system
+  -- don't re-detect a provider you're already connected to. Vine locates the
+  action surface; it does not itself complete a booking, order, or payment.
 license: MIT
 compatibility: Claude Code, Codex CLI, Cursor, OpenClaw, and any agent that can run shell commands and read a markdown skill file.
 metadata:
   homepage: https://vine.getcourtyard.ai
   docs: https://docs.vine.getcourtyard.ai
+  keywords: [booking, reservations, ordering, scheduling, commerce, agentic-commerce, provider-detection, web-detection, gtm]
 ---
 
 # Vine /detect
@@ -26,6 +30,16 @@ its booking/ordering CTAs, and returns the detected provider(s) plus the exact
 Reach for this **before** guessing or scraping a booking URL. Agents that
 hallucinate "the reservation page is probably /book" fail silently; Vine returns
 the real surface, resolved from the live site.
+
+**Vine finds the surface, it doesn't act on it.** `/detect` returns the provider
+and the resolved `actionUrl`; completing the booking, order, or payment is still
+up to your own browser/checkout capability, or the human. Don't report a
+transaction as done just because detection succeeded.
+
+**Set expectations before calling.** A fresh live detect typically takes 1-2
+minutes (cached repeats return in ~1s). If this is one step in a longer task,
+say so upfront instead of going quiet, and use a long client timeout (see
+below) so you don't mistake a slow site for a hang.
 
 ## When to use it
 
@@ -210,11 +224,20 @@ Errors use `{ "error": { "code", "message" } }`. Handle these explicitly:
   site; report that plainly rather than inventing one.
 - **Cache:** the same domain re-detected recently returns instantly and cheaply.
   Append `?mode=fresh` to `/detect` to force a live re-scan at full price.
+- **Don't loop or re-detect wastefully.** One call per business is enough; the
+  cache serves repeats for about 7 days. The only sanctioned retry is the
+  `detection_incomplete` retry above (max ~2 extra attempts) -- don't keep
+  calling `/detect` hoping for a different result.
 - **Batch research:** run `/detect` per business (respect the rate tier / back
-  off on `429`); collect `providers` + `actionUrl` across the set.
+  off on `429`); collect `providers` + `actionUrl` across the set. Before
+  running it across many businesses, tell the user roughly how many credits
+  that will cost (~12-26 per business) so there are no surprises.
 - **Credit budget:** every billable response carries `vine-credits-used` and
   `vine-credits-remaining` headers; read them to track spend and stop before
   you run out.
+- **Network footprint:** this skill only calls `vine.getcourtyard.ai` endpoints
+  using the `VINE_API_KEY` you configure. It doesn't read local files or
+  contact any other host.
 - Data **extraction** from the detected providers (menus, schedules, availability)
   is in private beta; see https://vine.getcourtyard.ai/docs or email
   contact@getcourtyard.ai for early access.
