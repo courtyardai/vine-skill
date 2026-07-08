@@ -1,0 +1,28 @@
+# vine-detect (agent skill)
+
+An agent skill for [Vine](https://vine.getcourtyard.ai), the API that finds the
+customer-facing software a business actually transacts through (OpenTable,
+Mindbody, Toast, Calendly, and more) and the exact URL where a customer can
+book, order, reserve, or schedule.
+
+Load this skill into an agent and it learns when to reach for Vine instead of
+guessing or scraping a booking URL.
+
+## Install
+
+```bash
+npx skills add courtyardai/vine-skill
+```
+
+Compatible with Claude Code, Codex CLI, Cursor, OpenClaw, and any agent runtime
+that can read a markdown skill file.
+
+## Docs
+
+- Full API docs: https://docs.vine.getcourtyard.ai
+- Try it with no signup: https://docs.vine.getcourtyard.ai/try
+- Free API keys: https://vine.getcourtyard.ai/keys
+
+## License
+
+MIT, see [LICENSE](./LICENSE).
