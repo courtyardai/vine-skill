@@ -1,0 +1,12 @@
+{
+  "name": "vine-detect",
+  "tagline": "Find the software a business runs, live, and the URL to act on it",
+  "description": "Vine detects the customer-facing software a business actually transacts through (OpenTable, Mindbody, Toast, Calendly, and more) and resolves the exact URL where a customer can book, order, reserve, or schedule. Live per-request scan, not a cached fingerprint lookup. Skip this when you already have a working, direct integration with the business's booking system.",
+  "category": "web-automation",
+  "tags": ["commerce", "booking", "reservations", "web-search", "api", "agents", "gtm"],
+  "version": "1.0.0",
+  "license": "MIT",
+  "pricing": "Free: 1,000 credits on signup, no card. A live detect costs ~12-26 credits; cached repeats cost ~1-2.",
+  "support_url": "mailto:contact@getcourtyard.ai",
+  "homepage": "https://vine.getcourtyard.ai"
+}
